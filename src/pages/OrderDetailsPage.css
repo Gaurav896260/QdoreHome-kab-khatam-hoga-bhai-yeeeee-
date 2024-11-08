@@ -1,0 +1,21 @@
+.cancelled-banner {
+    background-color: #ffcccc;
+    color: #b30000;
+    font-weight: bold;
+    padding: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+    border: 1px solid #b30000;
+  }
+  
+  .grayed-out {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: grayscale(100%);
+  }
+  
+  .cancelled-order {
+    border: 2px solid #b30000;
+    background-color: #fff5f5;
+  }
+  

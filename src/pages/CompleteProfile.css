@@ -1,0 +1,64 @@
+/* CompleteProfile.css */
+.profile-container {
+    max-width: 600px;
+    margin: 40px auto; /* More margin for breathing space */
+    padding: 40px; /* Spacious padding */
+    font-family: 'Arial', sans-serif; /* Change to your preferred font */
+    background-color: #f4f4f9; /* Soft background color */
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  }
+  
+  h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px; /* More spacing for emphasis */
+    font-size: 2.5rem; /* Larger font size for a bolder title */
+  }
+  
+  h2 {
+    color: #555; /* Softer color for the subheading */
+    margin-top: 20px;
+    margin-bottom: 15px; /* More spacing */
+    font-size: 1.5rem; /* Enhanced font size */
+  }
+  
+  input {
+    width: 100%;
+    padding: 15px; /* Increased padding for comfort */
+    margin: 12px 0; /* Consistent margin */
+    border: 1px solid #ddd; /* Light border for subtlety */
+    border-radius: 8px;
+    font-size: 16px; /* Clear and readable font size */
+    transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
+  }
+  
+  input:focus {
+    border-color: #ff6f61; /* Vibrant focus border */
+    box-shadow: 0 0 5px rgba(255, 111, 97, 0.5); /* Subtle glow effect */
+    outline: none;
+  }
+  
+  button {
+    background-color: #ff6f61; /* Attractive button color */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 15px;
+    cursor: pointer;
+    font-size: 18px; /* Larger font for prominence */
+    width: 100%;
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
+    margin-top: 20px; /* Spacing above button */
+    box-shadow: 0 4px 15px rgba(255, 111, 97, 0.3); /* Button shadow for depth */
+  }
+  
+  button:hover {
+    background-color: #ff4f4f; /* Darker shade on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+  }
+  
+  button:active {
+    transform: scale(0.98); /* Button press effect */
+  }
+  

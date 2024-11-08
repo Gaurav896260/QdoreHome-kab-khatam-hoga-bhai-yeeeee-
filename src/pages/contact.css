@@ -1,0 +1,210 @@
+/* General Page Styling */
+.contact-us-page {
+  background: linear-gradient(to bottom, #0d0d0d, #020202);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Overlay Styling */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  backdrop-filter: blur(20px); /* Blur background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  transition: opacity 1s ease-in-out;
+}
+
+.overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1s ease-in-out, visibility 1s;
+}
+
+.overlay-circle {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(5, 5, 5, 0.4);
+}
+
+.overlay-content {
+  font-size: 3rem;
+  
+  text-align: center;
+  font-weight: 700;
+  line-height: 1.5;
+ 
+}
+
+/* Contact Form Section Styling */
+.contact-form-section {
+  opacity: 0;
+  visibility: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1rem;
+  transition: opacity 1s ease, visibility 1s ease;
+}
+
+.contact-form-section.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.contact-form-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+}
+
+/* Contact Details Styling */
+.contact-details {
+  padding: 2rem;
+  color: #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.contact-details h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  background: linear-gradient(to right, #8AA6A3, #1d4ed8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  @apply bg-heading-gradient
+}
+
+.contact-details h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #b0b0b0;
+}
+
+.contact-details p {
+  font-size: 1rem;
+  color: #d0d0d0;
+}
+
+/* Contact Form Styling */
+.contact-form {
+  background-color: #1a1a1a;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  padding: 2rem;
+  width: 100%;
+}
+
+.contact-form h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  background: linear-gradient(to right, #8AA6A3, #1d4ed8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  @apply bg-heading-gradient
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #333;
+  background-color: #282828;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: #127369;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.5);
+}
+
+.contact-form button {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(to right, #8AA6A3, #1d4ed8);
+  border: none;
+  border-radius: 0.5rem;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 1.5rem;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  @apply bg-heading-gradient
+}
+
+.contact-form button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+/* Footer Styling */
+.footer {
+  margin-top: auto;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 768px) {
+  .contact-form-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .contact-details h2,
+  .contact-form h2 {
+    font-size: 2rem;
+  }
+
+  .contact-details h3 {
+    font-size: 1.125rem;
+  }
+
+  .contact-form {
+    padding: 1.5rem;
+  }
+
+  .contact-form-section {
+    padding: 3rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-form-section {
+    padding: 2rem 1rem;
+  }
+
+  .contact-form h2,
+  .contact-details h2 {
+    font-size: 1.75rem;
+  }
+
+  .contact-details h3 {
+    font-size: 1rem;
+  }
+}

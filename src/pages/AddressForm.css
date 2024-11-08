@@ -1,0 +1,184 @@
+/* Address form container styles */
+.bg-gray-100 {
+    background-color: #f7fafc;
+  }
+  
+  .p-4 {
+    padding: 1rem;
+  }
+  
+  .rounded-lg {
+    border-radius: 0.5rem;
+  }
+  
+  .mb-6 {
+    margin-bottom: 1.5rem;
+  }
+  
+  .shadow {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  }
+  
+  /* Grid layout */
+  .grid {
+    display: grid;
+  }
+  
+  .grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  
+  .md\\:grid-cols-2 {
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  
+  .md\\:grid-cols-3 {
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  
+  .gap-6 {
+    gap: 1.5rem;
+  }
+  
+  .mb-4 {
+    margin-bottom: 1rem;
+  }
+  
+  /* Input and label styles */
+  .block {
+    display: block;
+  }
+  
+  .text-sm {
+    font-size: 0.875rem;
+  }
+  
+  .font-medium {
+    font-weight: 500;
+  }
+  
+  .text-gray-600 {
+    color: #718096;
+  }
+  
+  .mb-2 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .w-full {
+    width: 100%;
+  }
+  
+  .p-3 {
+    padding: 0.75rem;
+  }
+  
+  .bg-white {
+    background-color: #ffffff;
+  }
+  
+  .text-gray-700 {
+    color: #4a5568;
+  }
+  
+  .border {
+    border-width: 1px;
+  }
+  
+  .border-gray-300 {
+    border-color: #e2e8f0;
+  }
+  
+  /* Checkbox styles */
+  .form-checkbox {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    display: inline-block;
+    vertical-align: middle;
+    background-origin: border-box;
+    user-select: none;
+    flex-shrink: 0;
+    height: 1.25rem;
+    width: 1.25rem;
+  }
+  
+  .text-blue-600 {
+    color: #3182ce;
+  }
+  
+  /* Button styles */
+  .mt-4 {
+    margin-top: 1rem;
+  }
+  
+  .bg-blue-500 {
+    background-color: #4299e1;
+  }
+  
+  .text-white {
+    color: #ffffff;
+  }
+  
+  .px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  
+  .py-2 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  
+  .hover\\:bg-blue-600:hover {
+    background-color: #2b6cb0;
+  }
+  
+  .transition {
+    transition-property: background-color;
+  }
+  
+  .duration-300 {
+    transition-duration: 300ms;
+  }
+  
+  .bg-gray-300 {
+    background-color: #e2e8f0;
+  }
+  
+  .text-gray-700 {
+    color: #4a5568;
+  }
+  
+  .hover\\:bg-gray-400:hover {
+    background-color: #cbd5e0;
+  }
+  .notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px;
+    background-color: #4caf50; /* Green */
+    color: white;
+    border-radius: 5px;
+    z-index: 1000; /* Ensure it appears on top */
+    transition: opacity 0.5s ease-in-out;
+  }
+  .address-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .address-item button {
+    margin-left: 10px;
+  }
+    
