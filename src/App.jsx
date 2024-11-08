@@ -46,7 +46,7 @@ import ReturnPolicy from "./pages/ReturnPolicy.jsx";
 import PhoneVerification from "./pages/OTPbeforecheckout.jsx";
 import ChangePassword from "./pages/ChangePassword";
 import ForgotPassword from "./pages/ForgotPassword";
-import Check from "./pages/Check.jsx";
+import Checko from "./pages/Check.jsx";
 
 const App = () => {
   // const userInfo = useSelector((state) => state.auth.userInfo);
@@ -120,7 +120,7 @@ const App = () => {
         <Route path="/termsandconditions" element={<TermsAndConditions />} />
         <Route path="/shippingpolicy" element={<ShippingPolicy />} />
         <Route path="/returnpolicy" element={<ReturnPolicy />} />
-        <Route path="/check" element={<Check/>} />
+        <Route path="/check" element={<Checko/>} />
       </Routes>
     </Router>
   );
