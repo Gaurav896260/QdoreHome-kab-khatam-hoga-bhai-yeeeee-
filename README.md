@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # qhhhhhhhhhhh_final_hai_be
 =======
 <<<<<<< HEAD
@@ -15,3 +16,6 @@ Currently, two official plugins are available:
 # Qdorhome
 >>>>>>> origin/main
 >>>>>>> a486fe9 (initial commit)
+=======
+# QdoreHome-kab-khatam-hoga-bhai-yeeeee-
+>>>>>>> 5aff7385beda03bcc8f7d6e5fe9e8244c3e61187
