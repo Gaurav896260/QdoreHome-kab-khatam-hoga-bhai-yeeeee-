@@ -568,9 +568,7 @@ const Cart = () => {
         await saveLocalCartToDB(userData._id);
       }
       // Proceed to OTP page
-      navigate("/otp", {
-        state: { redirectTo: "/orderAddress", cart: [...dbCart, ...localCart] },
-      });
+      navigate("/checkout");
     }
   };
 

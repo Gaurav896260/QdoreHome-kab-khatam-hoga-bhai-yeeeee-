@@ -9,7 +9,7 @@ import Footer from "../components/Footer/Footer";
 const AddPhone = () => {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [password, setPassword] = useState(""); // State for password
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ const AddPhone = () => {
       fbUserId: user._id,
       displayName: user.displayName,
       token: user.token,
-      password: password, // Include password in user data
+      password: password,
     };
 
     try {
@@ -53,6 +53,9 @@ const AddPhone = () => {
           token: user.token,
         })
       );
+
+      localStorage.setItem("registrationComplete", "true");
+
       navigate("/");
     } catch (error) {
       setError(
@@ -64,126 +67,148 @@ const AddPhone = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
       <Navbar />
-      <div className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
-          <div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-              Create Your Account
-            </h2>
-            <p className="mt-2 text-center text-sm text-gray-600">
-              Please provide your details to complete registration
-            </p>
-          </div>
-          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-            <div className="rounded-md shadow-sm -space-y-px">
-              <div>
-                <label htmlFor="name" className="sr-only">
-                  Name
-                </label>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm"
-                  placeholder="Full Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
+      <div className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 py-16">
+        <div className="max-w-md w-full space-y-8 relative">
+          {/* Premium decorative elements */}
+          <div className="absolute -top-4 -left-4 w-24 h-24 border-t-2 border-l-2 border-gray-500 opacity-50"></div>
+          <div className="absolute -bottom-4 -right-4 w-24 h-24 border-b-2 border-r-2 border-gray-500 opacity-50"></div>
+
+          <div className="relative z-10 bg-black bg-opacity-60 p-8 rounded-xl backdrop-blur-sm border border-gray-800 shadow-2xl">
+            <div className="text-center">
+              <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gray-100 to-gray-400">
+                Complete Your Profile
+              </h2>
+              <div className="mt-2 flex justify-center">
+                <div className="w-16 h-1 bg-gradient-to-r from-gray-500 to-gray-300 rounded-full"></div>
               </div>
-              <div>
-                <label htmlFor="phoneNumber" className="sr-only">
-                  Phone Number
-                </label>
-                <input
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  type="tel"
-                  required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm"
-                  placeholder="Phone Number"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                />
-              </div>
-              <div>
-                <label htmlFor="password" className="sr-only">
-                  Password
-                </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
+              <p className="mt-4 text-gray-400 text-sm">
+                Enter your details to finalize your premium account
+              </p>
             </div>
 
-            {error && (
-              <div className="rounded-md bg-red-50 p-4">
-                <div className="flex">
-                  <div className="flex-shrink-0">
-                    <svg
-                      className="h-5 w-5 text-red-400"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                  <div className="ml-3">
-                    <h3 className="text-sm font-medium text-red-800">
-                      {error}
-                    </h3>
-                  </div>
+            <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+              <div className="space-y-4">
+                <div className="group">
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-gray-400 mb-1"
+                  >
+                    Full Name
+                  </label>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    required
+                    className="block w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-all duration-200 ease-in-out text-white placeholder-gray-500"
+                    placeholder="Enter your full name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
+
+                <div className="group">
+                  <label
+                    htmlFor="phoneNumber"
+                    className="block text-sm font-medium text-gray-400 mb-1"
+                  >
+                    Phone Number
+                  </label>
+                  <input
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    type="tel"
+                    required
+                    className="block w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-all duration-200 ease-in-out text-white placeholder-gray-500"
+                    placeholder="Enter your phone number"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                  />
+                </div>
+
+                <div className="group">
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-gray-400 mb-1"
+                  >
+                    Password
+                  </label>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    required
+                    className="block w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-all duration-200 ease-in-out text-white placeholder-gray-500"
+                    placeholder="Create a secure password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
                 </div>
               </div>
-            )}
 
-            <div>
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition duration-150 ease-in-out disabled:opacity-50"
-              >
-                {isLoading ? (
-                  <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                ) : null}
-                {isLoading ? "Processing..." : "Complete Registration"}
-              </button>
-            </div>
-          </form>
+              {error && (
+                <div className="rounded-lg bg-red-900 bg-opacity-50 p-4 border border-red-700">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0">
+                      <svg
+                        className="h-5 w-5 text-red-400"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <div className="ml-3">
+                      <h3 className="text-sm font-medium text-red-300">
+                        {error}
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-gray-800 to-black hover:from-gray-700 hover:to-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                >
+                  {isLoading ? (
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                  ) : null}
+                  <span className="relative group-hover:translate-x-1 transition-transform duration-200">
+                    {isLoading ? "Processing..." : "Complete Registration"}
+                  </span>
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
       <Footer />

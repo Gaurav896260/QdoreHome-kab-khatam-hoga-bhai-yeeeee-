@@ -4,7 +4,12 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import Home from "./pages/Home";
 import ContactUs from "./pages/ContactUs";
 import B2B from "./pages/B2B";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import OurStory from "./pages/OurStory";
 import ShopAll from "./pages/OurCollection/ShopAll.jsx";
 import Furniture from "./pages/ProductList/Furniture";
@@ -35,7 +40,6 @@ import TermsAndConditions from "./pages/TermsAndConditions.jsx";
 import CompleteProfile from "./pages/CompleteProfile.jsx";
 import AddPhone from "./pages/AddPhone.jsx";
 import OrderDetailPage from "./pages/OrderDetailsPage.jsx";
-import PrivateRoute from "./pages/PrivateRoute.jsx";
 import TrackOrderPage from "./pages/TrackOrder.jsx";
 import ReturnOrderPage from "./pages/ReturnPageOrder.jsx";
 import AddressSelection from "./pages/AddressSelection.jsx";
@@ -47,35 +51,94 @@ import PhoneVerification from "./pages/OTPbeforecheckout.jsx";
 import ChangePassword from "./pages/ChangePassword";
 import ForgotPassword from "./pages/ForgotPassword";
 import Checko from "./pages/Check.jsx";
+const PrivateRoute = ({ element: Component }) => {
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+  if (!userInfo) {
+    // Redirect to auth page if user is not logged in
+    return <Navigate to="/auth" replace />;
+  }
+
+  return Component;
+};
 
 const App = () => {
-  // const userInfo = useSelector((state) => state.auth.userInfo);
   return (
     <Router>
       <ScrollToTop />
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/ourStory" element={<OurStory />} />
         <Route path="/contactUs" element={<ContactUs />} />
         <Route path="/b2b" element={<B2B />} />
         <Route path="/ourCollection" element={<ShopAll />} />
         <Route path="/auth" element={<Auth />} />
-        <Route path="/completeProfile" element={<CompleteProfile />} />
-        <Route path="/addPhone" element={<AddPhone />} />
         <Route path="/furniture" element={<Furniture />} />
         <Route path="/decor" element={<Decor />} />
         <Route path="/servewares" element={<ServewareProduct />} />
         <Route path="/servewares/:productId" element={<ServewaresDesc />} />
         <Route path="/plantersandvases" element={<PlantersAndVases />} />
-        <Route path="/select-address" element={<AddressSelection />} />
-        <Route path="/add-address" element={<AddressForm />} />
-        <Route path="/otp" element={<PhoneVerification />} />
-        <Route path="/changepassword" element={<ChangePassword />} />
+        <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+        <Route path="/termsandconditions" element={<TermsAndConditions />} />
+        <Route path="/shippingpolicy" element={<ShippingPolicy />} />
+        <Route path="/returnpolicy" element={<ReturnPolicy />} />
+        <Route path="/videos" element={<Videos />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
+
+        {/* Protected Routes - Require Authentication */}
         <Route
-          path="/plantersandvases/:productId"
-          element={<PlantersAndVasesDesc />}
+          path="/completeProfile"
+          element={<PrivateRoute element={<CompleteProfile />} />}
         />
+        <Route
+          path="/addPhone"
+          element={<PrivateRoute element={<AddPhone />} />}
+        />
+        <Route
+          path="/select-address"
+          element={<PrivateRoute element={<AddressSelection />} />}
+        />
+        <Route
+          path="/add-address"
+          element={<PrivateRoute element={<AddressForm />} />}
+        />
+        <Route
+          path="/otp"
+          element={<PrivateRoute element={<PhoneVerification />} />}
+        />
+        <Route
+          path="/changepassword"
+          element={<PrivateRoute element={<ChangePassword />} />}
+        />
+        <Route path="/cart" element={<PrivateRoute element={<Cart />} />} />
+        <Route
+          path="/orderAddress"
+          element={<PrivateRoute element={<OrderAddress />} />}
+        />
+        <Route
+          path="/checkout"
+          element={<PrivateRoute element={<Checko />} />}
+        />
+        <Route path="/admin" element={<PrivateRoute element={<Admin />} />} />
+        <Route
+          path="/profile"
+          element={<PrivateRoute element={<MyProfile />} />}
+        />
+        <Route
+          path="/order/:orderId"
+          element={<PrivateRoute element={<OrderDetailPage />} />}
+        />
+        <Route
+          path="/track-order/:orderId"
+          element={<PrivateRoute element={<TrackOrderPage />} />}
+        />
+        <Route
+          path="/return-order/:orderId"
+          element={<PrivateRoute element={<ReturnOrderPage />} />}
+        />
+
+        {/* Product Routes - These could be either public or protected based on your needs */}
         <Route path="/woodenCollection" element={<WoodenCollection />} />
         <Route
           path="/woodenCollection/:productId"
@@ -101,26 +164,10 @@ const App = () => {
           path="/decor/objectDecor/:productId"
           element={<ObjectDecorProduct />}
         />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/orderAddress" element={<OrderAddress />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/profile" element={<MyProfile />} />
-        <Route path="/order/:orderId" element={<OrderDetailPage />} />
         <Route
-          path="/track-order/:orderId"
-          element={<PrivateRoute element={TrackOrderPage} />}
+          path="/plantersandvases/:productId"
+          element={<PlantersAndVasesDesc />}
         />
-        <Route
-          path="/return-order/:orderId"
-          element={<PrivateRoute element={ReturnOrderPage} />}
-        />
-        <Route path="/videos" element={<Videos />} />
-        <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-        <Route path="/termsandconditions" element={<TermsAndConditions />} />
-        <Route path="/shippingpolicy" element={<ShippingPolicy />} />
-        <Route path="/returnpolicy" element={<ReturnPolicy />} />
-        <Route path="/check" element={<Checko/>} />
       </Routes>
     </Router>
   );

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import {
@@ -27,7 +27,8 @@ const Auth = () => {
   const recaptchaVerifierRef = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const location = useLocation();
+  const redirectPath = location.state?.redirectTo || "/";
   useEffect(() => {
     initializeRecaptcha();
     return () => {
@@ -37,7 +38,12 @@ const Auth = () => {
       }
     };
   }, []);
-
+  const handleSuccessfulLogin = (userInfo) => {
+    dispatch(setCredentials(userInfo));
+    localStorage.setItem("userInfo", JSON.stringify(userInfo));
+    // Navigate to the redirect path instead of root
+    navigate(redirectPath);
+  };
   const initializeRecaptcha = () => {
     if (!recaptchaVerifierRef.current) {
       try {
@@ -143,9 +149,7 @@ const Auth = () => {
         if (verifyResponse.data.isValid) {
           const token = await generateToken(userData._id);
           const userInfo = { ...userData, token };
-          dispatch(setCredentials(userInfo));
-          localStorage.setItem("userInfo", JSON.stringify(userInfo));
-          navigate("/");
+          handleSuccessfulLogin(userInfo);
         } else {
           throw new Error("Incorrect password");
         }
@@ -232,14 +236,7 @@ const Auth = () => {
 
         if (response.data && response.data.user) {
           // Existing user
-          dispatch(
-            setCredentials({ ...response.data.user, token: accessToken })
-          );
-          localStorage.setItem(
-            "userInfo",
-            JSON.stringify({ ...response.data.user, token: accessToken })
-          );
-          navigate("/");
+          handleSuccessfulLogin({ ...response.data.user, token: accessToken });
         }
       } catch (error) {
         if (error.response && error.response.status === 404) {
@@ -251,9 +248,14 @@ const Auth = () => {
             token: accessToken,
           };
           localStorage.setItem("userInfo", JSON.stringify(userInfo));
-          navigate("/addPhone", { state: { user: userInfo } });
+          // For new users, we still need to collect phone info, so we'll save the redirect path
+          navigate("/addPhone", {
+            state: {
+              user: userInfo,
+              redirectTo: redirectPath,
+            },
+          });
         } else {
-          // Unexpected error
           throw error;
         }
       }
@@ -267,149 +269,148 @@ const Auth = () => {
 
   return (
     <>
-    <div className="flex flex-col min-h-screen bg-gray-100">
-      <Navbar />
-      <main className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 ">
-        <div className="w-full max-w-lg bg-white shadow-md rounded-lg p-8 mt-20 mb-20">
-          <h2 className="text-3xl font-bold font-roboto text-center text-gray-900 mb-6">
-            SIGN IN/UP YOUR ACCOUNT
-          </h2>
-          <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
-            <div>
-              <label
-                htmlFor="phone"
-                className="block text-2xl font-medium font-roboto text-gray-800 mb-4"
-              >
-                Phone Number
-              </label>
-              <div className="flex">
-                <div className="w-16 flex items-center justify-center bg-gray-200 border border-gray-300 border-r-0 rounded-l-md">
-                  <img
-                    src={`https://flagcdn.com/w20/${countryCode}.png`}
-                    alt="Country flag"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = "https://flagcdn.com/w20/in.png";
-                    }}
-                    className="w-10 h-8"
-                  />
-                </div>
-                <input
-                  id="phone"
-                  type="tel"
-                  value={phoneNumber}
-                  onChange={handlePhoneChange}
-                  className="flex-1 block w-full rounded-r-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 text-lg"
-                  placeholder="Enter your phone number here"
-                />
-              </div>
-            </div>
-            {showPassword && (
+      <div className="flex flex-col min-h-screen bg-gray-100">
+        <Navbar />
+        <main className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 ">
+          <div className="w-full max-w-lg bg-white shadow-md rounded-lg p-8 mt-20 mb-20">
+            <h2 className="text-3xl font-bold font-roboto text-center text-gray-900 mb-6">
+              SIGN IN/UP YOUR ACCOUNT
+            </h2>
+            <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
               <div>
                 <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="phone"
+                  className="block text-2xl font-medium font-roboto text-gray-800 mb-4"
                 >
-                  Password
+                  Phone Number
                 </label>
-                <div className="relative">
+                <div className="flex">
+                  <div className="w-16 flex items-center justify-center bg-gray-200 border border-gray-300 border-r-0 rounded-l-md">
+                    <img
+                      src={`https://flagcdn.com/w20/${countryCode}.png`}
+                      alt="Country flag"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "https://flagcdn.com/w20/in.png";
+                      }}
+                      className="w-10 h-8"
+                    />
+                  </div>
                   <input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full pr-10 border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
-                    placeholder="Enter your password"
+                    id="phone"
+                    type="tel"
+                    value={phoneNumber}
+                    onChange={handlePhoneChange}
+                    className="flex-1 block w-full rounded-r-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 text-lg"
+                    placeholder="Enter your phone number here"
                   />
-                  <button
-                    type="button"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? (
-                      <EyeOffIcon className="h-5 w-5 text-gray-400" />
-                    ) : (
-                      <EyeIcon className="h-5 w-5 text-gray-400" />
-                    )}
-                  </button>
                 </div>
               </div>
-            )}
-            {confirmResult && (
-              <div>
-                <label
-                  htmlFor="otp"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  OTP
-                </label>
-                <input
-                  id="otp"
-                  type="text"
-                  value={verificationCode}
-                  onChange={(e) => setVerificationCode(e.target.value)}
-                  className="block w-full border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
-                  placeholder="Enter OTP"
-                />
-              </div>
-            )}
-            <button
-              onClick={confirmResult ? verifyOTP : handleAuthAction}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              disabled={isLoading}
-            >
-              {isLoading
-                ? "Processing..."
-                : confirmResult
-                ? "Verify OTP"
-                : showPassword
-                ? "Login"
-                : "Continue"}
-            </button>
-          </form>
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-            <div className="mt-6">
+              {showPassword && (
+                <div>
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Password
+                  </label>
+                  <div className="relative">
+                    <input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="block w-full pr-10 border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
+                      placeholder="Enter your password"
+                    />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <EyeOffIcon className="h-5 w-5 text-gray-400" />
+                      ) : (
+                        <EyeIcon className="h-5 w-5 text-gray-400" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              )}
+              {confirmResult && (
+                <div>
+                  <label
+                    htmlFor="otp"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    OTP
+                  </label>
+                  <input
+                    id="otp"
+                    type="text"
+                    value={verificationCode}
+                    onChange={(e) => setVerificationCode(e.target.value)}
+                    className="block w-full border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
+                    placeholder="Enter OTP"
+                  />
+                </div>
+              )}
               <button
-                onClick={handleGoogleSignIn}
-                className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                onClick={confirmResult ? verifyOTP : handleAuthAction}
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                disabled={isLoading}
               >
-                <Mail className="h-5 w-5 mr-2" />
-                Sign in with Google
+                {isLoading
+                  ? "Processing..."
+                  : confirmResult
+                  ? "Verify OTP"
+                  : showPassword
+                  ? "Login"
+                  : "Continue"}
               </button>
+            </form>
+            <div className="mt-6">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-gray-500">
+                    Or continue with
+                  </span>
+                </div>
+              </div>
+              <div className="mt-6">
+                <button
+                  onClick={handleGoogleSignIn}
+                  className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                >
+                  <Mail className="h-5 w-5 mr-2" />
+                  Sign in with Google
+                </button>
+              </div>
+            </div>
+            <div className="mt-6 flex justify-between text-sm">
+              <Link
+                to="/forgotpassword"
+                className="font-medium text-gray-600 hover:text-gray-500"
+              >
+                Forgot Password?
+              </Link>
             </div>
           </div>
-          <div className="mt-6 flex justify-between text-sm">
-            <Link
-              to="/forgotpassword"
-              className="font-medium text-gray-600 hover:text-gray-500"
-            >
-              Forgot Password?
-            </Link>
-            
+        </main>
+        {error && (
+          <div
+            className="mt-4 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded relative"
+            role="alert"
+          >
+            <span className="block sm:inline">{error}</span>
           </div>
-        </div>
-      </main>
-      {error && (
-        <div
-          className="mt-4 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded relative"
-          role="alert"
-        >
-          <span className="block sm:inline">{error}</span>
-        </div>
-      )}
-      <div id="recaptcha-container" className="hidden"></div>
-      <Footer />
-    </div>
+        )}
+        <div id="recaptcha-container" className="hidden"></div>
+        <Footer />
+      </div>
     </>
   );
 };
