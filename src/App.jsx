@@ -111,7 +111,7 @@ const App = () => {
           path="/changepassword"
           element={<PrivateRoute element={<ChangePassword />} />}
         />
-        <Route path="/cart" element={<PrivateRoute element={<Cart />} />} />
+        <Route path="/cart" element={<Cart />} />
         <Route
           path="/orderAddress"
           element={<PrivateRoute element={<OrderAddress />} />}
