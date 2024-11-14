@@ -2,7 +2,15 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../assets/logoImp.png";
 import { IoMdSearch } from "react-icons/io";
-import { FaFacebookF, FaInstagram, FaLinkedin, FaAmazon, FaPhoneAlt, FaMapMarkerAlt, FaEnvelopeSquare } from 'react-icons/fa';
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaLinkedin,
+  FaAmazon,
+  FaPhoneAlt,
+  FaMapMarkerAlt,
+  FaEnvelopeSquare,
+} from "react-icons/fa";
 import {
   FaCartPlus,
   FaUser,
@@ -13,6 +21,7 @@ import {
 import DarkMode from "./DarkMode";
 import { useSelector } from "react-redux";
 import data from "./data.js";
+import axios from "axios";
 
 const Menu = [
   { id: 0, name: "Our Collection", link: "/ourCollection" },
@@ -61,16 +70,33 @@ const Navbar = () => {
   const navigate = useNavigate();
   const searchRef = useRef(null);
   const [filteredItems, setFilteredItems] = useState([]);
-  const [userInfo, setUserInfo] = useState(
-    JSON.parse(localStorage.getItem("userInfo"))
-  );
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const isLoggedIn = !!userInfo;
 
   const [query, setQuery] = useState("");
 
   const searchInputRef = useRef(null);
   const searchContainerRef = useRef(null);
+  const [cartItemCount, setCartItemCount] = useState(0);
+  // const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  useEffect(() => {
+    const fetchCartItemCount = async () => {
+      try {
+        if (userInfo) {
+          const response = await axios.get(
+            `https://qdore-backend-final-final-last.vercel.app/api/cart/count/${userInfo._id}`
+          );
+          setCartItemCount(response.data.itemCount);
+        } else {
+          setCartItemCount(0);
+        }
+      } catch (error) {
+        console.error("Error fetching cart item count:", error);
+      }
+    };
 
+    fetchCartItemCount();
+  }, [userInfo]);
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTextIndex((prevIndex) =>
@@ -220,8 +246,9 @@ const Navbar = () => {
                   }}
                 />
                 <div
-                  className={`transition-all duration-300 ease-in-out overflow-hidden flex items-center ml-2 ${searchOpen ? "w-40 sm:w-60 opacity-100" : "w-0 opacity-0"
-                    }`}
+                  className={`transition-all duration-300 ease-in-out overflow-hidden flex items-center ml-2 ${
+                    searchOpen ? "w-40 sm:w-60 opacity-100" : "w-0 opacity-0"
+                  }`}
                 >
                   <input
                     id="search-input"
@@ -268,9 +295,14 @@ const Navbar = () => {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => handleNavigation("/cart")}
-                className="bg-gradient-to-r from-golden-yellow to-golden-orange transition-all duration-200 text-white py-1 px-4 rounded-full flex items-center gap-3 group"
+                className="bg-gradient-to-r from-golden-yellow to-golden-orange transition-all duration-200 text-white py-1 px-4 rounded-full flex items-center gap-3 group relative"
               >
                 <FaCartPlus className="text-2xl text-white drop-shadow-sm cursor-pointer" />
+                {userInfo && (
+                  <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full px-2 py-1 text-xs">
+                    {cartItemCount}
+                  </span>
+                )}
               </button>
 
               <button
@@ -292,8 +324,9 @@ const Navbar = () => {
             {Menu.map((data) => (
               <li
                 key={data.id}
-                className={`relative group ${data.subMenu ? "hover:bg-gray-100" : ""
-                  }`}
+                className={`relative group ${
+                  data.subMenu ? "hover:bg-gray-100" : ""
+                }`}
                 onMouseEnter={() => data.subMenu && setActiveDropdown(data.id)}
                 onMouseLeave={() => setActiveDropdown(null)}
               >
@@ -338,7 +371,7 @@ const Navbar = () => {
                       &times;
                     </button>
                   </div>
-                  
+
                   <div className="flex  mt-6 ">
                     <a
                       onClick={() => handleNavigation("/")}
@@ -351,9 +384,6 @@ const Navbar = () => {
                       />
                     </a>
                   </div>
-
-                  
-
 
                   <ul className="flex flex-col items-start gap-4 mt-10 space-y-2">
                     {Menu.map((data) => (
@@ -371,8 +401,9 @@ const Navbar = () => {
                           <span className="font-semibold">{data.name}</span>
                           {data.subMenu && (
                             <FaChevronDown
-                              className={`ml-2 z-50 cursor-pointer transition-transform ${activeSubMenu === data.id ? "rotate-180" : ""
-                                }`}
+                              className={`ml-2 z-50 cursor-pointer transition-transform ${
+                                activeSubMenu === data.id ? "rotate-180" : ""
+                              }`}
                             />
                           )}
                         </div>
@@ -395,7 +426,10 @@ const Navbar = () => {
                     ))}
                   </ul>
                   <div className="mt-10">
-                    <p><br /><br /></p>
+                    <p>
+                      <br />
+                      <br />
+                    </p>
                   </div>
                   <div className="flex gap-8 mb-10 mt-10">
                     {/* Social Media Icons */}
@@ -451,7 +485,6 @@ const Navbar = () => {
                       </span>
                     </div>
                   </div>
-
                 </div>
               </div>
             )}
