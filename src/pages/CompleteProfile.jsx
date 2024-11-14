@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -10,19 +10,31 @@ const CompleteProfile = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [user] = useState(JSON.parse(localStorage.getItem("userInfo")));
 
-  const user = location.state?.user;
+  const generateToken = async (userId) => {
+    try {
+      const tokenResponse = await axios.post(
+        "https://qdore-backend-final-final-last.vercel.app/api/users/auth/token",
+        { userId }
+      );
 
-  useEffect(() => {
-    console.log("Current user info from Redux:", user);
-  }, [user]);
+      if (tokenResponse.data && tokenResponse.data.token) {
+        return tokenResponse.data.token;
+      } else {
+        throw new Error("Token generation failed: No token returned");
+      }
+    } catch (error) {
+      console.error("Error generating token:", error);
+      throw error;
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,11 +43,11 @@ const CompleteProfile = () => {
 
     const userData = {
       username: username,
-      mobile: user.phone,
+      mobile: user?.phone,
       email: email,
       password: password,
-      fbUserId: user._id,
-      token: user.token,
+      fbUserId: user?._id,
+      token: user?.token,
     };
 
     try {
@@ -44,27 +56,43 @@ const CompleteProfile = () => {
         userData
       );
 
+      const userResponse = await axios
+        .get(
+          `https://qdore-backend-final-final-last.vercel.app/api/users/phone/${encodeURIComponent(
+            user?.phone
+          )}`
+        )
+        .catch((error) => {
+          if (error.response?.status === 404) {
+            return { data: { user: null } };
+          }
+          throw error;
+        });
+
+      const userDataResponse = userResponse.data?.user;
+      const token = await generateToken(userDataResponse._id);
+
       dispatch(
         setCredentials({
           user: response.data.user,
-          token: user.token,
+          token: token,
         })
       );
 
-      // Set both user info and registration status in localStorage
       localStorage.setItem(
         "userInfo",
         JSON.stringify({
           ...response.data.user,
-          token: user.token,
+          token: token,
         })
       );
+
       localStorage.setItem("isRegistrationCompleteViaPhone", "true");
 
       setShowModal(true);
       setTimeout(() => {
         setShowModal(false);
-        navigate("/auth");
+        navigate("/");
       }, 3000);
     } catch (error) {
       console.error(
